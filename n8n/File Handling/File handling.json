@@ -1,0 +1,693 @@
+{
+  "name": "File handling",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        -96
+      ],
+      "id": "61e7e2b1-4d52-4ebe-a0a7-c32d191bd7be",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        64,
+        112
+      ],
+      "id": "db0cd929-2850-4cc1-a74d-1a98d95191e2",
+      "name": "Convert to File1"
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        64,
+        352
+      ],
+      "id": "c1f2d429-80f5-4f7e-9300-d8669683c1c4",
+      "name": "Convert to File2"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1ywSRkR_f0pGCnV8pDyU6Po1W12QwCXEL",
+          "mode": "list",
+          "cachedResultName": "customers.csv",
+          "cachedResultUrl": "https://drive.google.com/file/d/1ywSRkR_f0pGCnV8pDyU6Po1W12QwCXEL/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -368,
+        -96
+      ],
+      "id": "75665807-5771-4b03-9440-274898178f48",
+      "name": "CSV File",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "lkKutDCHSPUxRFUh",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "18lALCojVoR7J5cXG04IibQitrCpQMAn3",
+          "mode": "list",
+          "cachedResultName": "customers.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/18lALCojVoR7J5cXG04IibQitrCpQMAn3/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -368,
+        352
+      ],
+      "id": "5c4f34c6-90c8-4d90-8537-07e5fec1fe4b",
+      "name": "PDF",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "lkKutDCHSPUxRFUh",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1JYhUYJ7gsWbIew7CscCELT783F7dUrCy",
+          "mode": "list",
+          "cachedResultName": "customers.html",
+          "cachedResultUrl": "https://drive.google.com/file/d/1JYhUYJ7gsWbIew7CscCELT783F7dUrCy/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -368,
+        112
+      ],
+      "id": "690a38db-1351-4267-be28-59a1da7f8c9c",
+      "name": "HTML",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "lkKutDCHSPUxRFUh",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "html",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        112
+      ],
+      "id": "a22202ee-2b6b-42af-8f24-b9a9023390b0",
+      "name": "Extracting HTML"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -176,
+        -96
+      ],
+      "id": "3c61c8bb-b0ab-4391-ae31-0c33b2ce64ec",
+      "name": "Extract from CSV"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        352
+      ],
+      "id": "5f905361-4792-4521-9c09-c69ad962eabb",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "=The Converted JSON FILES",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -720,
+        192
+      ],
+      "id": "9598b3e5-7ea9-47eb-a52e-55ec657fdac5",
+      "name": "Create folder",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "lkKutDCHSPUxRFUh",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        560
+      ],
+      "id": "90c75715-d448-49be-9a21-dca51b28a9bb",
+      "name": "Convert to File3"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "18lALCojVoR7J5cXG04IibQitrCpQMAn3",
+          "mode": "list",
+          "cachedResultName": "customers.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/18lALCojVoR7J5cXG04IibQitrCpQMAn3/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -368,
+        560
+      ],
+      "id": "9dfbf1da-dfe4-4af8-96af-2949a7134ab5",
+      "name": "Xlxs",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "lkKutDCHSPUxRFUh",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        560
+      ],
+      "id": "e9eb8ac6-fdb5-4bc8-b2d5-322d1c0c8529",
+      "name": "Extract from File1"
+    },
+    {
+      "parameters": {
+        "name": "CSV To JSON",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('CSV File').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        288,
+        -96
+      ],
+      "id": "49deea7b-7311-4381-9d9f-f312e9a40cee",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "lkKutDCHSPUxRFUh",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "HTML To JSON",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Create folder').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        288,
+        112
+      ],
+      "id": "86a751c0-f99e-435e-b5ad-3bf7f6b20403",
+      "name": "Upload file1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "lkKutDCHSPUxRFUh",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "PDF  To JSON",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Create folder').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        288,
+        352
+      ],
+      "id": "5af8fd5a-55b8-437c-8839-abaa73040bc9",
+      "name": "Upload file2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "lkKutDCHSPUxRFUh",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "XLXS To JSON",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Create folder').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        272,
+        560
+      ],
+      "id": "6edb862e-45a1-411e-9279-007e1f5403ec",
+      "name": "Upload file3",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "lkKutDCHSPUxRFUh",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -928,
+        192
+      ],
+      "id": "56ea2b3d-e011-4afc-9320-38dcf13e3144",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "text in file",
+        "binaryPropertyName": "={{ $json['text in file'] }}",
+        "options": {
+          "fileName": "ReadME"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        688,
+        560
+      ],
+      "id": "4cae4bd8-b1c0-41fd-9daa-1800b1c7e99a",
+      "name": "Convert to File4"
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "I have uploaded files in drive,and converted it into json and again stored it in drive.",
+        "name": "ReadME",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Create folder').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        880,
+        560
+      ],
+      "id": "415b240e-74d3-40c0-8305-7f1e45abc899",
+      "name": "Upload file4",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "lkKutDCHSPUxRFUh",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d6a9bff0-d10d-4b68-9810-7a6482e4c21c",
+              "name": "text in file",
+              "value": "I have uploaded files in drive,and converted it into json and again stored it in drive.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        560
+      ],
+      "id": "e39a6967-a5de-4cfe-9f5c-d650f7e0be1d",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "CSV File": {
+      "main": [
+        [
+          {
+            "node": "Extract from CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PDF": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Extracting HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extracting HTML": {
+      "main": [
+        [
+          {
+            "node": "Convert to File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from CSV": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Convert to File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File2": {
+      "main": [
+        [
+          {
+            "node": "Upload file2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Xlxs": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Convert to File3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File1": {
+      "main": [
+        [
+          {
+            "node": "Upload file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File3": {
+      "main": [
+        [
+          {
+            "node": "Upload file3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder": {
+      "main": [
+        [
+          {
+            "node": "CSV File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Create folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file1": {
+      "main": [
+        [
+          {
+            "node": "PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file2": {
+      "main": [
+        [
+          {
+            "node": "Xlxs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File4": {
+      "main": [
+        [
+          {
+            "node": "Upload file4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Convert to File4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "21623e32-8afa-4eba-b651-df3659e7f41c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f973b6211b077ae7ed792ede0492c1182f52a5dfad171dd60a712b9d3549b523"
+  },
+  "id": "Xqf0C0DEydttLOr7",
+  "tags": []
+}
