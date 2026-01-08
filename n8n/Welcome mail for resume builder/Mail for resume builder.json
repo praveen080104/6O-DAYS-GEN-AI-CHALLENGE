@@ -1,0 +1,142 @@
+{
+  "name": "Mail for resume builder",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional email writer for Resume Builder, a modern resume creation platform at resumebuilder.blog.\n\nWrite a warm, professional welcome email for a new user who just signed up.\n\nUSER INFORMATION:\n- Name: {{ $json.body.name }}\n- Email: {{ $json.email }}\n\nEMAIL REQUIREMENTS:\n\n1. GREETING: Start with a personalized greeting using their name\n\n2. WELCOME MESSAGE:\n  - Thank them for joining Resume Builder\n  - Express excitement about helping them\n\n3. KEY FEATURES (mention these):\n ✓ Create professional resumes with beautiful templates\n ✓ Real-time preview while editing\n ✓ Download high-quality PDFs instantly\n ✓ Save and edit resumes anytime\n ✓ Multiple professional templates (Modern & Classic)\n\n4. CALL-TO-ACTION:\n - Encourage them to start creating their first resume\n - Include link: https://resumebuilder.blog\n\n5. SUPPORT INFORMATION:\n- Offer help if needed\n- Contact: resumebuilderblog@gmail.com\n\n6. STYLE GUIDELINES:\n- Tone: Warm, professional, encouraging\n- Length: 150-200 words maximum\n- Add 2-3 relevant emojis (not too many!)\n- Use simple, clear language\n- Make it feel personal, not robotic\n\n7. CLOSING:\n- Sign off as \"The Resume Builder Team\"\n- Add a motivational closing line about their career journey\n\nOUTPUT FORMAT:\n  Generate a complete HTML email with:\n  - Inline CSS styles for email compatibility\n  - Professional color scheme (blues #667eea, purples #764ba2, grays)\n  - Responsive design (max-width: 600px)\n  - Clean, modern layout\n  - Proper spacing and padding\n  - Include a header section\n  - Include a footer with copyright and website link 2025 resume builder blog\n\nReturn ONLY the HTML content starting with a <div> container. Do not include <!DOCTYPE>, <html>, <head>, or <body> tags and ```html or ``` on th end or on the fron or middle.",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "="
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "efad77be-871c-4dc2-9525-b47208208ebb",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        144,
+        208
+      ],
+      "id": "240d7238-dbdb-454d-bcdd-a74b3298f800",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "84lpwjbfwwCtvtuT",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "Welcome to Resume Builder! 🎉",
+        "message": "={{ $json.text }}",
+        "options": {
+          "appendAttribution": false,
+          "senderName": ""
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        528,
+        0
+      ],
+      "id": "54c0234b-f68e-4cc4-91d8-8e9ce2514677",
+      "name": "Send a message",
+      "webhookId": "c922ab5b-1a2c-4f1d-b86f-3f0dfadf9e44",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "z63jq8QbXrA6MRll",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "welcome-email",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f840314d-4bc2-4b37-9ab3-826b6bbea9e5",
+      "name": "Webhook",
+      "webhookId": "947df229-03db-4245-983c-bc0aa28b848d"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ab23965f-a461-47e8-ba9e-4ebe66f26c29",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f973b6211b077ae7ed792ede0492c1182f52a5dfad171dd60a712b9d3549b523"
+  },
+  "id": "3lxtNaGmN1Ib2X7y",
+  "tags": []
+}
