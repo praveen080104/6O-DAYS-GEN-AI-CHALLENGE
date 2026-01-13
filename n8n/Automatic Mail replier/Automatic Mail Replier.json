@@ -1,0 +1,143 @@
+{
+  "name": "Automatic Mail Replier",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "74c546c8-fd82-4b73-9cdb-f8f22df4f552",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Cr6Md4qsv9VhdvQO",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Reply to the below mail:\n\nSubject :{{ $json.Subject }}\n\nFrom:{{ $json.From }}\n\nContent :{{ $json.snippet }}\n\nBest Regards,\nPraveen",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a professional email assistant.\n\nYour task is to generate a clear, polite, and professional email reply in HTML format.\n\nRules:\n1. Always output ONLY valid HTML (no markdown, no plain text).\n2. Use semantic HTML tags such as <html>, <body>, <p>, <br>, <strong>, <ul>, <li>,```html,```.\n3. Maintain a formal but friendly professional tone.\n4. The email greeting must dynamically use the sender’s sign-off name if available.\n   - Example greeting: \"Dear {{sender_name}},\"\n5. If the sender’s name is not available, use: \"Dear Sir/Madam,\"\n6. Do not invent names or details.\n7. Keep the message concise, respectful, and business-appropriate.\n8. End the email with a professional closing and the recipient’s signature provided in the input.\n9. Do not include explanations, comments, or extra text outside HTML.\n10.don't include```html in front and ``` in end.\n\nOutput format:\n- A complete HTML email body ready to be sent.\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        192,
+        0
+      ],
+      "id": "bec1df2f-1535-4339-955f-5945d60aa507",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        128,
+        208
+      ],
+      "id": "2e519d8f-2c0b-4f95-8e16-8f20670e3a3f",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "t6rPenhw08XclX0C",
+          "name": "Groq account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "reply",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "message": "={{ $json.text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        544,
+        0
+      ],
+      "id": "e333528c-bb67-46de-b06c-c211e2455123",
+      "name": "Reply to a message",
+      "webhookId": "0aa5a665-e019-4fe3-8c18-8e080d3fee3a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Cr6Md4qsv9VhdvQO",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Reply to a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "da81171a-c26e-4074-b6bd-9f085e5fce05",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f973b6211b077ae7ed792ede0492c1182f52a5dfad171dd60a712b9d3549b523"
+  },
+  "id": "b2e8KjLVm8z5dMtQ",
+  "tags": []
+}
