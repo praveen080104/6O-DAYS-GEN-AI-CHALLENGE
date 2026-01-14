@@ -1,0 +1,332 @@
+{
+  "name": "Gsheet mastering",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        0
+      ],
+      "id": "735c7e84-f797-4c7a-b6a1-5a328078d907",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=send a welcome mail : \nTo : {{ $json.name }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are an email assistant responsible for generating professional welcome emails.\n\nYour task:\n- Generate a well-structured HTML email.\n- The email must be visually clean, responsive, and compatible with common email clients.\n- Use inline CSS only (no external stylesheets).\n- Keep the tone friendly, professional, and welcoming.\n- Do NOT include JavaScript.\n- Do NOT include markdown.\n- Output ONLY valid HTML (no explanations, no plain text).\n\nEmail requirements:\n- Include a clear subject line (provided separately or inferred).\n- Include a greeting using the recipient’s name if available.\n- Briefly welcome the user to the platform/service.\n- Highlight key next steps or benefits.\n- Include a primary call-to-action button.\n- Add a polite closing and signature.\n- Include a small footer note (support contact or unsubscribe text).\n-always sign off mail with: \nRegards,\nPraveen \n\nTone:\nWarm, positive, professional, and encouraging.\n\nOutput format:\nReturn ONLY the complete HTML email body.\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        112,
+        0
+      ],
+      "id": "8120ac0d-aa54-4b43-b796-ac6d3d8a76be",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        48,
+        208
+      ],
+      "id": "1385cbbb-3a11-4baf-b4db-5603a410ea2c",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "t6rPenhw08XclX0C",
+          "name": "Groq account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get row(s) in sheet').item.json.user }}",
+        "subject": "Welcome mail!!",
+        "message": "={{ $json.text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        -112
+      ],
+      "id": "4c634d77-6aeb-44dd-8bab-bde2acd7d82d",
+      "name": "Send a message",
+      "webhookId": "248d64b6-b00d-4e29-92d1-efb4ed2f56b8",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Cr6Md4qsv9VhdvQO",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1la_DPtAT6pqjMcY74RekWYTU7KvpPsRA1CabQ4eKzZk",
+          "mode": "list",
+          "cachedResultName": "Untitled spreadsheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1la_DPtAT6pqjMcY74RekWYTU7KvpPsRA1CabQ4eKzZk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1la_DPtAT6pqjMcY74RekWYTU7KvpPsRA1CabQ4eKzZk/edit#gid=0"
+        },
+        "combineFilters": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -96,
+        0
+      ],
+      "id": "4adf7036-23f6-4e66-a657-72d937c92e44",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hilttl6NqHcREkkF",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1la_DPtAT6pqjMcY74RekWYTU7KvpPsRA1CabQ4eKzZk",
+          "mode": "list",
+          "cachedResultName": "Untitled spreadsheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1la_DPtAT6pqjMcY74RekWYTU7KvpPsRA1CabQ4eKzZk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1la_DPtAT6pqjMcY74RekWYTU7KvpPsRA1CabQ4eKzZk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            " mail sent": "={{ $json.text }}",
+            "name": "={{ $('Get row(s) in sheet').item.json.name }}"
+          },
+          "matchingColumns": [
+            "name"
+          ],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "user",
+              "displayName": "user",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": " mail sent",
+              "displayName": " mail sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        928,
+        176
+      ],
+      "id": "a3d480cc-455d-41b9-9501-e6c6de70fc4b",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hilttl6NqHcREkkF",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "= {{ $json.text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a pure text transformation engine.\n\nYour ONLY task:\n- Transform the input into plain text.\n\nABSOLUTE RULES (NON-NEGOTIABLE):\n- Output ONLY the transformed text.\n- DO NOT add headings, explanations, labels, or prefixes.\n- DO NOT say phrases like:\n  \"Here is the output\"\n  \"Normalized text\"\n  \"Result\"\n- DO NOT introduce any new content.\n\nTRANSFORMATION RULES:\n- Remove ALL HTML tags.\n- Remove ALL newline characters:\n  - line breaks\n  - \\n\n  - \\\\n\n  - \\r\n  - \\\\r\n- Remove ALL asterisk (*) characters.\n- Remove bullet formatting.\n- Replace any sequence of whitespace (spaces, tabs, line breaks) with a SINGLE SPACE.\n- Preserve original sentence order and wording.\n- Keep punctuation as-is.\n\nFINAL OUTPUT CONSTRAINT:\n- Output MUST be EXACTLY ONE LINE.\n- Output MUST NOT contain:\n  - \\n\n  - \\\\n\n  - *\n  - double spaces\n- If any forbidden character exists, REMOVE it before returning output.\n\nInput:\n- Raw text or HTML.\n\nOutput:\n- ONE LINE of clean plain text.\n- NOTHING ELSE.\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        448,
+        144
+      ],
+      "id": "085be224-b3d6-4404-bc2a-35cbe14d8c85",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        320,
+        368
+      ],
+      "id": "2230f54e-716b-4905-a8b5-ac4d4040ecb6",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "t6rPenhw08XclX0C",
+          "name": "Groq account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "7361a49f-c014-4c38-9535-11dc6599cb3c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f973b6211b077ae7ed792ede0492c1182f52a5dfad171dd60a712b9d3549b523"
+  },
+  "id": "gjNOQk3mFcuLq8hL",
+  "tags": []
+}
