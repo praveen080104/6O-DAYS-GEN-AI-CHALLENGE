@@ -1,0 +1,192 @@
+{
+  "name": "Telgram pdf summary",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {
+          "download": true
+        }
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f8d22cc1-06a0-46aa-9ecf-f23002e07ec6",
+      "name": "Telegram Trigger",
+      "webhookId": "58fa7822-1309-4976-a32c-3ea02f959c99",
+      "credentials": {
+        "telegramApi": {
+          "id": "kSFdA5lY6NUqJxbr",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "536e6473-eed7-45ab-879c-a553f43781a2",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Summarize the following PDF content in a clear and simple way.\n\nPDF Content:\n{{ $json.text }}\n",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are an expert at summarizing PDF documents.\n\nYour task is to produce a clear, concise, and readable summary.\n\nSTRICT RULES:\n- Return ONLY plain UTF-8 text\n- Do NOT use markdown, HTML, or special formatting\n- Do NOT use symbols like *, _, <, >, |, or backticks\n- Do NOT include system tokens, headers, or metadata\n- Do NOT repeat the input text\n- Use short sentences and simple wording\n- Keep the total output under 1200 characters\n- Always start with the line: Summary of PDF\n- Write in a professional and easy-to-understand tone\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        624,
+        0
+      ],
+      "id": "9981288d-6508-46ae-9f68-fb705b40ff75",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        512,
+        240
+      ],
+      "id": "2fcfec15-d35e-4fe6-90e3-869686e00fc1",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "t6rPenhw08XclX0C",
+          "name": "Groq account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        960,
+        0
+      ],
+      "id": "3c9e2911-ba3f-4f5c-b785-0578d4d7bf9b",
+      "name": "Send a text message",
+      "webhookId": "af73ca81-4940-43a0-8817-854f2b99371d",
+      "credentials": {
+        "telegramApi": {
+          "id": "kSFdA5lY6NUqJxbr",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let text = $json.text || \"\";\n\n// Remove control characters like \\u0010\ntext = text.replace(/[\\x00-\\x1F\\x7F]/g, \" \");\n\n// Normalize whitespace\ntext = text.replace(/\\s+/g, \" \").trim();\n\n// Optional: limit size before LLM\ntext = text.slice(0, 12000);\n\nreturn [{ text }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "3a5386e1-8edc-438f-ae69-b15c34e8f3d1",
+      "name": "Code in JavaScript1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "81ebb394-6300-46b9-bfeb-96f6ea1cb9aa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f973b6211b077ae7ed792ede0492c1182f52a5dfad171dd60a712b9d3549b523"
+  },
+  "id": "A7pD8pmse0YbckwE",
+  "tags": []
+}
