@@ -1,0 +1,172 @@
+{
+  "name": "Telgram Chat Text to voice",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9e0d85f9-8d99-4051-ba43-60bb32801b17",
+      "name": "Telegram Trigger",
+      "webhookId": "8d1a606b-955a-455b-a5a0-154a13570fcd",
+      "credentials": {
+        "telegramApi": {
+          "id": "kSFdA5lY6NUqJxbr",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=give script for the below: {{ $json.message.text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a amazing story script writer,give script as per user input"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "68e247dd-c9bc-4768-949b-f7a1cc90b0fe",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "input": "={{ $json.text }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        560,
+        0
+      ],
+      "id": "eba4890c-d134-4171-89a6-da07ee23b199",
+      "name": "Generate audio",
+      "credentials": {
+        "openAiApi": {
+          "id": "84lpwjbfwwCtvtuT",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        144,
+        208
+      ],
+      "id": "f70d281f-7fc5-4502-8064-8613cb338f6a",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "t6rPenhw08XclX0C",
+          "name": "Groq account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAudio",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        768,
+        0
+      ],
+      "id": "64c12301-8267-48f3-a248-a285b805dc1a",
+      "name": "Send an audio file",
+      "webhookId": "e254d151-1c12-4aae-b19d-33d3e620b6f4",
+      "credentials": {
+        "telegramApi": {
+          "id": "kSFdA5lY6NUqJxbr",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Generate audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate audio": {
+      "main": [
+        [
+          {
+            "node": "Send an audio file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fa27d0a7-05dc-413a-969c-567550973ca3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f973b6211b077ae7ed792ede0492c1182f52a5dfad171dd60a712b9d3549b523"
+  },
+  "id": "PYiWILNx6EGKqDHi",
+  "tags": []
+}
